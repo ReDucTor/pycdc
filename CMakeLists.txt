@@ -7,6 +7,9 @@ find_package(PythonInterp REQUIRED)
 if(CMAKE_COMPILER_IS_GNUCXX)
     set(CMAKE_CXX_FLAGS "-Wall -Wextra -Werror ${CMAKE_CXX_FLAGS}")
 elseif(MSVC)
+    # Make MSVC enable exceptions (it exists within the STL)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /EHsc")
+
     # Make MSVC treat compiler warnings as errors
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /WX")
 
