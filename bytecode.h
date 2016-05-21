@@ -1,6 +1,10 @@
-#include "pyc_code.h"
-#include "pyc_module.h"
-#include "data.h"
+template<typename ObjT>
+class PycRef;
+
+class PycCode;
+class PycBuffer;
+class PycModule;
+class PycObject;
 
 namespace Pyc {
 

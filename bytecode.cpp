@@ -1,5 +1,8 @@
-#include "pyc_numeric.h"
 #include "bytecode.h"
+
+#include "pyc_numeric.h"
+#include "pyc_string.h"
+#include "pyc_module.h"
 
 #ifdef _MSC_VER
 #define snprintf _snprintf
