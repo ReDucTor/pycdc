@@ -12,19 +12,19 @@ public:
             m_obj->addRef();
     }
 
-    PycRef(const PycRef<ObjT>& obj) : m_obj(obj.m_obj)
+    PycRef(const PycRef& obj) : m_obj(obj.m_obj)
     {
         if (m_obj)
             m_obj->addRef();
     }
 
-    ~PycRef<ObjT>()
+    ~PycRef()
     {
         if (m_obj)
             m_obj->delRef();
     }
 
-    PycRef<ObjT>& operator=(ObjT* obj)
+    PycRef& operator=(ObjT* obj)
     {
         if (obj)
             obj->addRef();
@@ -34,7 +34,7 @@ public:
         return *this;
     }
 
-    PycRef<ObjT>& operator=(const PycRef<ObjT>& obj)
+    PycRef& operator=(const PycRef& obj)
     {
         if (obj.m_obj)
             obj.m_obj->addRef();
@@ -45,9 +45,9 @@ public:
     }
 
     bool operator==(ObjT* obj) const { return m_obj == obj; }
-    bool operator==(const PycRef<ObjT>& obj) const { return m_obj == obj.m_obj; }
+    bool operator==(const PycRef& obj) const { return m_obj == obj.m_obj; }
     bool operator!=(ObjT* obj) const { return m_obj != obj; }
-    bool operator!=(const PycRef<ObjT>& obj) const { return m_obj != obj.m_obj; }
+    bool operator!=(const PycRef& obj) const { return m_obj != obj.m_obj; }
 
     ObjT& operator*() const { return *m_obj; }
     ObjT* operator->() const { return m_obj; }
