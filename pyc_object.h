@@ -1,30 +1,30 @@
 #ifndef _PYC_OBJECT_H
 #define _PYC_OBJECT_H
 
-template <class _Obj>
+template <class ObjT>
 class PycRef {
 public:
     PycRef() : m_obj(0) { }
 
-    PycRef(_Obj* obj) : m_obj(obj)
+    PycRef(ObjT* obj) : m_obj(obj)
     {
         if (m_obj)
             m_obj->addRef();
     }
 
-    PycRef(const PycRef<_Obj>& obj) : m_obj(obj.m_obj)
+    PycRef(const PycRef<ObjT>& obj) : m_obj(obj.m_obj)
     {
         if (m_obj)
             m_obj->addRef();
     }
 
-    ~PycRef<_Obj>()
+    ~PycRef<ObjT>()
     {
         if (m_obj)
             m_obj->delRef();
     }
 
-    PycRef<_Obj>& operator=(_Obj* obj)
+    PycRef<ObjT>& operator=(ObjT* obj)
     {
         if (obj)
             obj->addRef();
@@ -34,7 +34,7 @@ public:
         return *this;
     }
 
-    PycRef<_Obj>& operator=(const PycRef<_Obj>& obj)
+    PycRef<ObjT>& operator=(const PycRef<ObjT>& obj)
     {
         if (obj.m_obj)
             obj.m_obj->addRef();
@@ -44,21 +44,21 @@ public:
         return *this;
     }
 
-    bool operator==(_Obj* obj) const { return m_obj == obj; }
-    bool operator==(const PycRef<_Obj>& obj) const { return m_obj == obj.m_obj; }
-    bool operator!=(_Obj* obj) const { return m_obj != obj; }
-    bool operator!=(const PycRef<_Obj>& obj) const { return m_obj != obj.m_obj; }
+    bool operator==(ObjT* obj) const { return m_obj == obj; }
+    bool operator==(const PycRef<ObjT>& obj) const { return m_obj == obj.m_obj; }
+    bool operator!=(ObjT* obj) const { return m_obj != obj; }
+    bool operator!=(const PycRef<ObjT>& obj) const { return m_obj != obj.m_obj; }
 
-    _Obj& operator*() const { return *m_obj; }
-    _Obj* operator->() const { return m_obj; }
-    operator _Obj*() const { return m_obj; }
+    ObjT& operator*() const { return *m_obj; }
+    ObjT* operator->() const { return m_obj; }
+    operator ObjT*() const { return m_obj; }
 
     /* This is just for coding convenience -- no type checking is done! */
-    template <class _Cast>
-    PycRef<_Cast> cast() const { return static_cast<_Cast*>(m_obj); }
+    template <class CastT>
+    PycRef<CastT> cast() const { return static_cast<CastT*>(m_obj); }
 
 private:
-    _Obj* m_obj;
+    ObjT* m_obj;
 };
 
 
