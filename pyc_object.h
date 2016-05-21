@@ -1,12 +1,25 @@
 #ifndef _PYC_OBJECT_H
 #define _PYC_OBJECT_H
 
+#include <cstddef>
+
 template <class ObjT>
 class PycRef {
+    template<class AnyObjT>
+    friend class PycRef;
 public:
     PycRef() : m_obj(nullptr) { }
+    PycRef(std::nullptr_t) : m_obj(nullptr) { }
 
-    PycRef(ObjT* obj) : m_obj(obj)
+    template<class AnyObjT>
+    PycRef(AnyObjT* obj) : m_obj(obj)
+    {
+        if (m_obj)
+            m_obj->addRef();
+    }
+
+    template<class AnyObjT>
+    PycRef(const PycRef<AnyObjT>& obj) : m_obj(obj.m_obj)
     {
         if (m_obj)
             m_obj->addRef();
@@ -24,13 +37,25 @@ public:
             m_obj->delRef();
     }
 
-    PycRef& operator=(ObjT* obj)
+    template<class AnyObjT>
+    PycRef& operator=(AnyObjT* obj)
     {
         if (obj)
             obj->addRef();
         if (m_obj)
             m_obj->delRef();
         m_obj = obj;
+        return *this;
+    }
+
+    template<class AnyObjT>
+    PycRef& operator=(const PycRef<AnyObjT> & obj)
+    {
+        if (obj.m_obj)
+            obj.m_obj->addRef();
+        if (m_obj)
+            m_obj->delRef();
+        m_obj = obj.m_obj;
         return *this;
     }
 
@@ -44,14 +69,10 @@ public:
         return *this;
     }
 
-    bool operator==(ObjT* obj) const { return m_obj == obj; }
-    bool operator==(const PycRef& obj) const { return m_obj == obj.m_obj; }
-    bool operator!=(ObjT* obj) const { return m_obj != obj; }
-    bool operator!=(const PycRef& obj) const { return m_obj != obj.m_obj; }
-
     ObjT& operator*() const { return *m_obj; }
     ObjT* operator->() const { return m_obj; }
     operator ObjT*() const { return m_obj; }
+    ObjT* get() const { return m_obj; }
 
     /* This is just for coding convenience -- no type checking is done! */
     template <class CastT>
@@ -60,6 +81,18 @@ public:
 private:
     ObjT* m_obj;
 };
+
+template<class T, class U>
+inline bool operator==(const PycRef<T>& lhs, const PycRef<U>& rhs)
+{
+    return lhs.get() == rhs.get();
+}
+
+template<class T, class U>
+inline bool operator!=(const PycRef<T>& lhs, const PycRef<U>& rhs)
+{
+    return !(lhs == rhs);
+}
 
 
 class PycData;
