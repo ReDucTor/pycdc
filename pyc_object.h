@@ -2,6 +2,7 @@
 #define _PYC_OBJECT_H
 
 #include <cstddef>
+#include <type_traits>
 
 template <class ObjT>
 class PycRef {
@@ -75,7 +76,8 @@ public:
     ObjT* get() const { return m_obj; }
 
     /* This is just for coding convenience -- no type checking is done! */
-    template <class CastT>
+    template <class CastT, typename = typename std::enable_if<
+        std::is_base_of<ObjT, CastT>::value >::type>
     PycRef<CastT> cast() const { return static_cast<CastT*>(m_obj); }
 
 private:
