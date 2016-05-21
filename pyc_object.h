@@ -4,7 +4,7 @@
 template <class ObjT>
 class PycRef {
 public:
-    PycRef() : m_obj(0) { }
+    PycRef() : m_obj(nullptr) { }
 
     PycRef(ObjT* obj) : m_obj(obj)
     {
