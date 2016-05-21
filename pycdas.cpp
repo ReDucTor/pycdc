@@ -223,7 +223,7 @@ int main(int argc, char* argv[])
     dispname = (dispname == NULL) ? argv[1] : dispname + 1;
     fprintf(pyc_output, "%s (Python %d.%d%s)\n", dispname, mod.majorVer(), mod.minorVer(),
            (mod.majorVer() < 3 && mod.isUnicode()) ? " -U" : "");
-    output_object(mod.code().cast<PycObject>(), &mod, 0);
+    output_object(mod.code(), &mod, 0);
 
     return 0;
 }
